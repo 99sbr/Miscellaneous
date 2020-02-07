@@ -44,19 +44,18 @@ Hint – Expected answer definitely involves more than a count.
 * Solution Images:
 
 Output of Function `month_wise_billcreation_count`. It Shows the Frequency of Bill Creation on every Billing Cycle.
-
 ![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Bill%20Creation%20Frequency%20Distribution.png)
 ---------------
-Output of Function `month_wise_billcreation_count`.It shows the Frequency of Bill Paying on every Billing Cycle.
 
+Output of Function `month_wise_billcreation_count`.It shows the Frequency of Bill Paying on every Billing Cycle.
 ![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Bill%20Paid%20Frequency%20Distribution.png)
 --------------
-Output of Function `total_bill_status_cyclewise`. It shows the total Amount of BillPaid and Created during each Billing period.
 
+Output of Function `total_bill_status_cyclewise`. It shows the total Amount of BillPaid and Created during each Billing period.
 ![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Billing%20Transactioon%20Details%20for%20Each%20Cycle.png)
 --------------
-Graph show Billing cycle of Total Amount of Bill Created and Paid.
 
+Graph show Billing cycle of Total Amount of Bill Created and Paid.
 ![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Cycle%20wise%20Amount.png)
 -------------
 
@@ -74,7 +73,6 @@ This is output of Function `user_id_performance_over_entire_billcycle`. This sho
 ------------
 
 This shows Top 20 user_id interaction frequency.
-
 ![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Top%2020%20user_id%20interaction%20frequency.png)
 -----------
 
