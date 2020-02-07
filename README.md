@@ -7,7 +7,9 @@
 You are building a file sharing system intended to be used by ordinary people (e.g. your grandmother or other people with no computer skills whatsoever). 
 One option in this system is to browse by filename. If people choose "sort by filename", then files should be sorted in the manner that helps them find the file they are looking for as quickly as possible. 
 Here is an example list of files:
+```
 [ 'mallika_1.jpg', 'dog005.jpg', 'grandson_2018_01_01.png', 'dog008.jpg', 'mallika_6.jpg', 'grandson_2018_5_23.png', 'dog01.png', 'mallika_11.jpg', 'mallika2.jpg', 'grandson_2018_02_5.png', 'grandson_2019_08_23.jpg', 'dog9.jpg', 'mallika05.jpg' ]
+```
 Write a function that will sort this list of file names in the manner that the non-technical human user expects. 
 Include with your answer both your code and also the result of running your code on the list of files above.
 Requirements: You can use any programming language you like, but you must use the standard library only. 
@@ -30,3 +32,22 @@ Feel free to ask as many questions as possible.
 You are free to do this question in python or SQL.
 
 Hint – Expected answer definitely involves more than a count*. 
+
+* Solution Images:
+![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Bill%20Creation%20Frequency%20Distribution.png)
+
+![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Bill%20Paid%20Frequency%20Distribution.png)
+
+![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Billing%20Transactioon%20Details%20for%20Each%20Cycle.png)
+
+![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Cycle%20wise%20Amount.png)
+
+![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Cycle%20wise%20Amount_userid.png)
+
+![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Cycle%20wise%20user_id%20Count.png)
+
+![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Cycle%20wise%20user_id%20Count_userid.png)
+
+![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Top%2020%20user_id%20interaction%20frequency.png)
+
+![image]
