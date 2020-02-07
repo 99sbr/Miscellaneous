@@ -16,6 +16,9 @@ Requirements: You can use any programming language you like, but you must use th
 
 Hint – Expected answer definitely involves more than a 1 line of code. 
 
+* [Find Solution](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/CaseQ1.ipynb)
+
+-------------------
 `CaseStudy – Q2`
 
 At Simpl, repayments are corner stone of our business model. We give credit to people in good faith and expect that they will repay back us in time. Thus it becomes imperative for us to track our repayments. One key step towards it is quick summary of repayments detailing out how much amount and number of people are pending or settled. We have a 15 day cycle and want to track this repayment info at a cycle level.
@@ -31,9 +34,14 @@ Crisp summary of how we are doing each cycle
 Feel free to ask as many questions as possible.
 You are free to do this question in python or SQL.
 
-Hint – Expected answer definitely involves more than a count*. 
+Hint – Expected answer definitely involves more than a count.
+
+
+* [Find Solution](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/CaseStudyQ2-%20Complete%20Analysis%20and%20Visualization%20Report.ipynb)
+
 
 * Solution Images:
+
 ![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Bill%20Creation%20Frequency%20Distribution.png)
 
 ![image](https://github.com/99sbr/Miscellaneous/blob/master/Simpl/Assignment_Product_Analyst/Bill%20Paid%20Frequency%20Distribution.png)
