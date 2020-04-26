@@ -1,3 +1,15 @@
 .DS_Store
+.vs_code
+ModelCheckpoint/*
 *.csv
 *.pkl
+*.zip
+*.txt
+*.png
+*.npy
+*.hdf5
+/AnalytixLab/Image Classification Case Study(Retail )/a0409a00-8-dataset_dp/*
+/AnalytixLab/Image Classification Case Study(Retail )/ModelCheckpoints/*
+/AnalytixLab/Image Classification Case Study(Retail )/prediction/*
+/AnalytixLab/Mixed - Digital - Text Classification-Python/ModelCheckpoint/*
+/United/catboost_info/*
