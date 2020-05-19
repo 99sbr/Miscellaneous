@@ -1,14 +1,55 @@
 import re
 
-import pandas as pd
-import spacy
-
-nlp = spacy.load('en_core_web_lg', disable=['parser', 'ner'])
 import contractions
+import pandas as pd
+import pyLDAvis.gensim
+import spacy
+from gensim import models, corpora
 from nltk.corpus import stopwords
 
+nlp = spacy.load('en_core_web_lg', disable=['parser', 'ner'])
 stop_words = stopwords.words('english')
-import wordninja
+
+
+def clean_up(text):
+    removal = ['ADV', 'PRON', 'CCONJ', 'PUNCT', 'PART', 'DET', 'ADP', 'SPACE']
+    text_out = []
+    doc = nlp(text)
+    for token in doc:
+        if token.is_stop == False and token.is_alpha and len(token) > 2 and token.pos_ not in removal:
+            lemma = token.lemma_
+            text_out.append(lemma)
+    return text_out
+
+
+def topic_modelling(data):
+    datalist = data.text.apply(lambda x: clean_up(x))
+    dictionary = corpora.Dictionary(datalist)
+    doc_term_matrix = [dictionary.doc2bow(doc) for doc in datalist]
+
+    num_topics = 8
+    Lda = models.LdaMulticore
+    ldamodel = Lda(doc_term_matrix,
+                   num_topics=num_topics,
+                   id2word=dictionary,
+                   passes=20,
+                   iterations=100,
+                   chunksize=10000,
+                   eval_every=10)
+    topic_data = pyLDAvis.gensim.prepare(
+        ldamodel, doc_term_matrix, dictionary, mds='tsne')
+    all_topics = {}
+    lambd = 0.5  # Adjust this accordingly
+    for i in range(1, 8):  # Adjust this to reflect number of topics chosen for final LDA model
+        topic = topic_data.topic_info[topic_data.topic_info.Category ==
+                                      'Topic' + str(i)]
+        topic['relevance'] = topic['loglift'] * \
+            (1 - lambd) + topic['logprob'] * lambd
+        all_topics['Topic ' + str(i)] = topic.sort_values(
+            by='relevance', ascending=False).Term[:5].values
+
+    lda_topics = pd.DataFrame(all_topics).T
+    return lda_topics
 
 
 def rightTypes(ngram):
@@ -65,7 +106,8 @@ def data_cleaning(data):
     data.clean_text = data.clean_text.map(lambda x: _removeNonAscii(x))
 
     # remove url
-    data['clean_text'] = data['clean_text'].apply(lambda x: re.sub(r'http\S+', '', x))
+    data['clean_text'] = data['clean_text'].apply(
+        lambda x: re.sub(r'http\S+', '', x))
 
     # resolve contractions
     data['clean_text'] = data['clean_text'].apply(
@@ -75,14 +117,6 @@ def data_cleaning(data):
     # replace special chars
     data['clean_text'] = data['clean_text'].str.replace("[^a-zA-Z0-9]", " ")
 
-    def lemmatization(texts):
-        output = []
-        for i in texts:
-            s = [token.lemma_ for token in nlp(i)]
-            output.append(' '.join(s))
-        return output
-
-    data.clean_text = lemmatization(data.clean_text)
     data.clean_text = data.clean_text.str.split()
     # turn all text' tokens into one single list
     unlist_clean_text = [item for items in data.clean_text for item in items]
@@ -107,7 +141,8 @@ def freq_trigram_finder(trigramFinder):
                                                                                                  ascending=False)
 
     trigramFreqTable.reset_index(drop=True, inplace=True)
-    filtered_tri = trigramFreqTable[trigramFreqTable.trigram.map(lambda x: rightTypesTri(x))]
+    filtered_tri = trigramFreqTable[trigramFreqTable.trigram.map(
+        lambda x: rightTypesTri(x))]
     freq_tri = filtered_tri[:20].trigram.values
     return freq_tri
 
@@ -123,7 +158,8 @@ def pmi_trigram_finder(trigramFinder, trigrams):
 def ttest_trigram_finder(trigramFinder, trigrams):
     trigramTtable = pd.DataFrame(list(trigramFinder.score_ngrams(trigrams.student_t)),
                                  columns=['trigram', 't']).sort_values(by='t', ascending=False)
-    filteredT_tri = trigramTtable[trigramTtable.trigram.map(lambda x: rightTypesTri(x))]
+    filteredT_tri = trigramTtable[trigramTtable.trigram.map(
+        lambda x: rightTypesTri(x))]
     t_tri = filteredT_tri[:20].trigram.values
     return t_tri
 
@@ -139,7 +175,8 @@ def likelihood_trigram_finder(trigramFinder, trigrams):
     trigramLikTable = pd.DataFrame(list(trigramFinder.score_ngrams(trigrams.likelihood_ratio)),
                                    columns=['trigram', 'likelihood ratio']).sort_values(by='likelihood ratio',
                                                                                         ascending=False)
-    filteredLik_tri = trigramLikTable[trigramLikTable.trigram.map(lambda x: rightTypesTri(x))]
+    filteredLik_tri = trigramLikTable[trigramLikTable.trigram.map(
+        lambda x: rightTypesTri(x))]
     lik_tri = filteredLik_tri[:20].trigram.values
     return lik_tri
 
@@ -148,14 +185,20 @@ if __name__ == "__main__":
     import nltk
 
     print('\n **Loading and Preprocessing Data** \n ')
-    data_path = "data - data.csv"
-    data = load_data(data_path)
+    try:
+        data_path = "data - data.csv"
+        data = load_data(data_path)
+    except Exception as e:
+        print(e)
+        exit(0)
     unlist_text = data_cleaning(data)
-    print('\n ** Vocabulary Size: **  \n ', len(unlist_text))
+    print('\n ** Vocabulary Size:{} ** \n '.format(len(unlist_text)))
     bigrams = nltk.collocations.BigramAssocMeasures()
     trigrams = nltk.collocations.TrigramAssocMeasures()
-    bigramFinder = nltk.collocations.BigramCollocationFinder.from_words(unlist_text)
-    trigramFinder = nltk.collocations.TrigramCollocationFinder.from_words(unlist_text)
+    bigramFinder = nltk.collocations.BigramCollocationFinder.from_words(
+        unlist_text)
+    trigramFinder = nltk.collocations.TrigramCollocationFinder.from_words(
+        unlist_text)
 
     print('\n ** Phrase Extraction in Progress ** \n ')
     freq_tri = freq_trigram_finder(trigramFinder)
@@ -165,10 +208,10 @@ if __name__ == "__main__":
     lik_tri = likelihood_trigram_finder(trigramFinder, trigrams)
 
     print('\n ** Compiling Results ** \n')
-    trigramsCompare = pd.DataFrame([freq_tri, pmi_tri, t_tri, chi_tri, lik_tri]).T
+    trigramsCompare = pd.DataFrame(
+        [freq_tri, pmi_tri, t_tri, chi_tri, lik_tri]).T
     trigramsCompare.columns = ['Frequency With Filter', 'PMI', 'T-test With Filter', 'Chi-Sq Test',
                                'Likelihood Ratio Test With Filter']
-
 
     COL_ORDER = ['PMI', 'Chi-Sq Test', 'Likelihood Ratio Test With Filter', 'T-test With Filter',
                  'Frequency With Filter']
@@ -179,5 +222,12 @@ if __name__ == "__main__":
         x = [trigram_set.add(x) for x in trigramsCompare[col].values]
 
     top_results = [' '.join(x) for x in list(trigram_set)]
-    print('\n ** Displaying Top {} Trigram Results from Corpus** \n'.format(50))
+    print('\n ** Displaying Top {} Topics Results from Corpus** \n'.format(50))
+    # Displaying Top-K results
     print(top_results[:50])
+
+    print('\n ** LDA: Topic Modelling in Progress ** \n')
+    lda_topics = topic_modelling(data)
+
+    print("\n ** Some Other Relevant Topics in Discussion ** \n:")
+    print(lda_topics)
