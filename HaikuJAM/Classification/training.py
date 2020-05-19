@@ -53,8 +53,8 @@ assert categorical_df.shape[0] == numerical_df.shape[0]
 print('Preprocessing Done')
 head_df = categorical_df.join(numerical_df)
 head_df['Listing_Type'] = target
-head_df.loc[head_df.Listing_Type == 'Good'] = 1
-head_df.loc[head_df.Listing_Type == 'Bad'] = -1
+head_df.loc[head_df.Listing_Type == 'Good', 'Listing_Type'] = 1
+head_df.loc[head_df.Listing_Type == 'Bad', 'Listing_Type'] = -1
 del categorical_df
 del numerical_df
 
@@ -120,7 +120,7 @@ for idx, df in enumerate(df_list):
     print('Set {} Training'.format(idx))
     X_train, X_test, y_train, y_test = train_test_split_df(df)
 
-    svclassifier = SVC(kernel='rbf', probability=True)
+    svclassifier = SVC(gamma=100, C=10*(idx+1), kernel='rbf', probability=True, random_state=(idx+1)*24)
     print('SVC Fitting')
     svclassifier.fit(X_train, y_train)
     from sklearn.externals import joblib
