@@ -26,23 +26,7 @@ def text_cleaning(data, column_name):
     # remove non-ascii characters
     data[column_name] = data[column_name].map(
         lambda x: _removeNonAscii(str(x)))
-    # remove url
-    # data[column_name] = data[column_name].apply(
-    #     lambda x: re.sub(r'http\S+', '', x))
-    # data[column_name] = data[column_name].apply(
-    #     lambda x: [contractions.fix(word) for word in x.split()])
-    # remove special characters, numbers, punctuations
-    # data[column_name] = data[column_name].apply(
-    #     lambda x: [y for y in x if y not in stop_words])
-    # data[column_name] = data[column_name].apply(lambda x: ' '.join(x))
     data[column_name] = data[column_name].str.replace("[^a-zA-Z0-9]", " ")
-    # wordninja splits words like "dayoftheyear" to  "day of the year"
-    # data[column_name] = data[column_name].apply(
-    #     lambda x: [wordninja.split(word) for word in x.split()])
-    # data[column_name] = data[column_name].apply(
-    #     lambda x: [item for sublist in x for item in sublist])
-    # data[column_name] = data[column_name].apply(lambda x: ' '.join(x))
-
     return data[column_name]
 
 
