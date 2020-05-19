@@ -1,23 +1,25 @@
+import gc
+from nltk.corpus import stopwords
+import pandas as pd
+from categorical_data_preprocessing import preprocess_categorical_df
+from numerical_data_preprocessing import preprocessing_numerics_df
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from utility import null_values
 import time
 import warnings
 
 start = time.time()
 warnings.filterwarnings("ignore")  # Ignoring unnecessory warnings
-from utility import null_values
-from sklearn.svm import SVC
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, confusion_matrix
-from numerical_data_preprocessing import preprocessing_numerics_df
-from categorical_data_preprocessing import preprocess_categorical_df
-import pandas as pd
 
-from nltk.corpus import stopwords
 
 stop_words = stopwords.words('english')
 #
 
 print("------- LOADING DATA ------")
-listings = pd.read_csv('/Users/subir/Codes/Miscellaneous/HaikuJAM/listings.csv', delimiter=';')
+listings = pd.read_csv(
+    '/Users/subir/Codes/Miscellaneous/HaikuJAM/listings.csv', delimiter=';')
 
 print('Data Shape: ', listings.shape)
 train_df = listings.drop(['Unnamed: 0', 'ID'], 1)
@@ -33,13 +35,18 @@ numerical_cols = [
     'First_Review', 'Last_Review', 'Geolocation'
 ]
 
-all_numerical_columns = train_df.select_dtypes(exclude=['object']).columns.to_list() + numerical_cols
+all_numerical_columns = train_df.select_dtypes(
+    exclude=['object']).columns.to_list() + numerical_cols
+print(len(all_numerical_columns))
+print(all_numerical_columns)
+exit(0)
 numerical_df = train_df[all_numerical_columns]
 print('Numerical Data Shape: ', numerical_df.shape)
 print('Preprocessing Numerical Data in Progress')
 numerical_df = preprocessing_numerics_df(numerical_df)
 
-all_object_columns = list(set(train_df.columns.to_list()) - set(all_numerical_columns))
+all_object_columns = list(
+    set(train_df.columns.to_list()) - set(all_numerical_columns))
 categorical_df = train_df[all_object_columns]
 print('Categorical Data Shape: ', categorical_df.shape)
 target = categorical_df.Listing_Type
@@ -58,7 +65,6 @@ head_df.loc[head_df.Listing_Type == 'Bad', 'Listing_Type'] = -1
 del categorical_df
 del numerical_df
 
-import gc
 
 print('GC Cleaned: ', gc.collect())
 
@@ -101,7 +107,6 @@ df5.to_csv('df_5.csv', index=False)
 print('Data Saved')
 df_list = [df1, df2, df3, df4, df5]
 
-import gc
 
 print('GC Cleaned: ', gc.collect())
 
@@ -110,7 +115,8 @@ def train_test_split_df(df):
     print('Creating Train Test Split')
     y = df.Listing_Type.astype('int')
     X = df.drop('Listing_Type', 1)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y.values)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42, stratify=y.values)
     print(X_train.shape, X_test.shape)
     return X_train, X_test, y_train, y_test
 
@@ -120,7 +126,7 @@ for idx, df in enumerate(df_list):
     print('Set {} Training'.format(idx))
     X_train, X_test, y_train, y_test = train_test_split_df(df)
 
-    svclassifier = SVC(gamma=100, C=10*(idx+1), kernel='rbf', probability=True, random_state=(idx+1)*24)
+    svclassifier = SVC(C=* (idx + 1), random_state=(idx + 1) * 24, probability=True)
     print('SVC Fitting')
     svclassifier.fit(X_train, y_train)
     from sklearn.externals import joblib
