@@ -9,6 +9,8 @@ from sklearn.svm import SVC
 from utility import null_values
 import time
 import warnings
+from sklearn.naive_bayes import GaussianNB
+nb_model = GaussianNB()
 
 start = time.time()
 warnings.filterwarnings("ignore")  # Ignoring unnecessory warnings
@@ -37,9 +39,7 @@ numerical_cols = [
 
 all_numerical_columns = train_df.select_dtypes(
     exclude=['object']).columns.to_list() + numerical_cols
-print(len(all_numerical_columns))
-print(all_numerical_columns)
-exit(0)
+
 numerical_df = train_df[all_numerical_columns]
 print('Numerical Data Shape: ', numerical_df.shape)
 print('Preprocessing Numerical Data in Progress')
@@ -61,7 +61,7 @@ print('Preprocessing Done')
 head_df = categorical_df.join(numerical_df)
 head_df['Listing_Type'] = target
 head_df.loc[head_df.Listing_Type == 'Good', 'Listing_Type'] = 1
-head_df.loc[head_df.Listing_Type == 'Bad', 'Listing_Type'] = -1
+head_df.loc[head_df.Listing_Type == 'Bad', 'Listing_Type'] = 0
 del categorical_df
 del numerical_df
 
@@ -70,7 +70,7 @@ print('GC Cleaned: ', gc.collect())
 
 
 def create_data_subsets(head_df):
-    minority_df = head_df[head_df.Listing_Type == -1]
+    minority_df = head_df[head_df.Listing_Type == 0]
     majority_df = head_df[head_df.Listing_Type == 1]
 
     # creating 5 sub_heads from majority_df
@@ -126,16 +126,17 @@ for idx, df in enumerate(df_list):
     print('Set {} Training'.format(idx))
     X_train, X_test, y_train, y_test = train_test_split_df(df)
 
-    svclassifier = SVC(C=* (idx + 1), random_state=(idx + 1) * 24, probability=True)
-    print('SVC Fitting')
-    svclassifier.fit(X_train, y_train)
+    # svclassifier = SVC(C=0.1 * (idx + 1),
+    #                    random_state=(idx + 1) * 24, probability=True)
+    print('Naive Bayes Fitting')
+    nb_model.fit(X_train, y_train)
     from sklearn.externals import joblib
 
     print('Done')
-    filename = 'df' + str(idx) + '.pfl'
-    joblib.dump(svclassifier, filename)
+    filename = 'df_nb' + str(idx) + '.pfl'
+    joblib.dump(nb_model, filename)
     print('Prediction in progress')
-    y_pred = svclassifier.predict(X_test)
+    y_pred = nb_model.predict(X_test)
 
     print('Confusion Matrix:\n\n')
     print(confusion_matrix(y_test, y_pred))

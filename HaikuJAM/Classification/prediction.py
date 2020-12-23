@@ -58,8 +58,8 @@ print('Preprocessing Done')
 import joblib
 
 # load the model from disk
-class_mapping = {1: 'Good', -1: 'Bad'}
-models = ['df0.pfl', 'df1.pfl', 'df2.pfl', 'df3.pfl', 'df4.pfl']
+class_mapping = {1: 'Good', 0: 'Bad'}
+models = ['df_nb0.pfl', 'df_nb1.pfl', 'df_nb2.pfl', 'df_nb3.pfl', 'df_nb4.pfl']
 probability = []
 for model in models:
     loaded_model = joblib.load(model)

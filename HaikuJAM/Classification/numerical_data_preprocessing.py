@@ -58,9 +58,8 @@ def preprocessing_numerics_df(numerical_df):
         inplace=True)
 
     for column in numerical_df.columns:
-        numerical_df[column] = numerical_df[column].astype('float32')
-
-        # numerical_df[column] = pd.to_numeric(numerical_df[column], errors='coerce')
+        numerical_df[column] = pd.to_numeric(
+            numerical_df[column], errors='coerce')
 
     numerical_df['Rating_log'] = np.log(numerical_df.Rating)
 
